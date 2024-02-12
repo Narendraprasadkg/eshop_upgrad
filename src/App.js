@@ -1,22 +1,42 @@
-// src/App.js
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Layout from './components/Layout';
-import Home from './components/Home';
-import LoginPage from './components/LoginPage';
-import SignupPage from './components/SignupPage';
+import React, { useCallback, useContext, useEffect } from 'react';
+import { createTheme, ThemeProvider } from '@material-ui/core/styles'; // Import from '@material-ui/core/styles' for Material-UI v4
+import PageSetUp from './components/PageSetUp';
+import { useDispatch } from 'react-redux';
+import { initCatalog } from './store/actions/metadataAction';
+import useAuthentication from './hooks/useAuthentication';
 
-const App = () => {
+const theme = createTheme({ // Use createMuiTheme instead of createTheme for Material-UI v4
+  palette: {
+    primary: {
+      main: '#3f51b5',
+    },
+    secondary: {
+      main: '#f50057',
+    },
+    disabled: {
+      main: '#56595c',
+    },
+  },
+});
+
+function App() {
+  const { AuthCtx } = useAuthentication();
+  const { accessToken } = useContext(AuthCtx);
+  const dispatch = useDispatch();
+
+  const initPageData = useCallback(() => {
+    dispatch(initCatalog(accessToken));
+  }, [dispatch, accessToken]);
+
+  useEffect(() => {
+    initPageData();
+  }, [initPageData]);
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Layout><Home /></Layout>} />
-        <Route path="/login" element={<Layout><LoginPage /></Layout>} />
-        <Route path="/signup" element={<Layout><SignupPage /></Layout>} />
-        {/* Add more routes as needed */}
-      </Routes>
-    </Router>
+    <ThemeProvider theme={theme}>
+      <PageSetUp />
+    </ThemeProvider>
   );
-};
+}
 
 export default App;

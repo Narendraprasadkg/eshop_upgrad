@@ -1,0 +1,121 @@
+{
+  "addresses": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "contactNumber": "123-456-7890",
+      "street": "123 Main St",
+      "city": "Cityville",
+      "state": "Stateland",
+      "landmark": "Nearby Park",
+      "zipcode": "12345"
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "contactNumber": "987-654-3210",
+      "street": "456 Oak St",
+      "city": "Townsville",
+      "state": "Statelandia",
+      "landmark": "Shopping Mall",
+      "zipcode": "54321"
+    },
+    {
+      "id": 3,
+      "name": "Bob Johnson",
+      "contactNumber": "555-123-4567",
+      "street": "789 Pine St",
+      "city": "Villagetown",
+      "state": "Landstate",
+      "landmark": "School Campus",
+      "zipcode": "67890"
+    }
+  ],
+  "orders": [
+    {
+      "quantity": "1",
+      "user": 15,
+      "product": 25,
+      "address": 1,
+      "addressObject": {
+        "id": 1,
+        "name": "John Doe",
+        "contactNumber": "123-456-7890",
+        "street": "123 Main St",
+        "city": "Cityville",
+        "state": "Stateland",
+        "landmark": "Nearby Park",
+        "zipcode": "12345"
+      },
+      "id": 1
+    },
+    {
+      "quantity": "1",
+      "user": 15,
+      "product": 1,
+      "address": 1,
+      "addressObject": {
+        "id": 1,
+        "name": "John Doe",
+        "contactNumber": "123-456-7890",
+        "street": "123 Main St",
+        "city": "Cityville",
+        "state": "Stateland",
+        "landmark": "Nearby Park",
+        "zipcode": "12345"
+      },
+      "id": 2
+    },
+    {
+      "quantity": "1",
+      "user": 15,
+      "product": 1,
+      "address": 2,
+      "addressObject": {
+        "id": 2,
+        "name": "Jane Smith",
+        "contactNumber": "987-654-3210",
+        "street": "456 Oak St",
+        "city": "Townsville",
+        "state": "Statelandia",
+        "landmark": "Shopping Mall",
+        "zipcode": "54321"
+      },
+      "id": 3
+    },
+    {
+      "quantity": "1",
+      "user": 15,
+      "product": 1,
+      "address": 2,
+      "addressObject": {
+        "id": 2,
+        "name": "Jane Smith",
+        "contactNumber": "987-654-3210",
+        "street": "456 Oak St",
+        "city": "Townsville",
+        "state": "Statelandia",
+        "landmark": "Shopping Mall",
+        "zipcode": "54321"
+      },
+      "id": 4
+    },
+    {
+      "quantity": "1",
+      "user": 15,
+      "product": 2,
+      "address": 3,
+      "addressObject": {
+        "id": 3,
+        "name": "Bob Johnson",
+        "contactNumber": "555-123-4567",
+        "street": "789 Pine St",
+        "city": "Villagetown",
+        "state": "Landstate",
+        "landmark": "School Campus",
+        "zipcode": "67890"
+      },
+      "id": 5
+    }
+  ]
+}
