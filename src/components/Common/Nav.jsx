@@ -13,11 +13,16 @@ import { Link } from 'react-router-dom';
 import Logout from '../Auth/Logout';
 import useAuthentication from '../../hooks/useAuthentication';
 import { ADMIN } from '../../common';
+import { createProduct } from '../../api/productAPIs';
+import { Button } from '@material-ui/core';
 
 
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
+  },
+  grow2: {
+    flexGrow: 2,
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -118,6 +123,24 @@ export default function PrimarySearchAppBar() {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+  const addProduct = async () => {
+      const mockProduct = {
+          "name": "as cma sdv",
+          "category": "ALL",
+          "manufacturer": "vkmasdvm",
+          "availableItems": "123",
+          "price": "12313",
+          "imageUrl": "https://www.gstatic.com/webp/gallery3/1.sm.png",
+          "description": "ckcmkasdmv"
+      };
+
+      try {
+          const r_product = await createProduct(mockProduct);
+          console.log(r_product.data);
+      } catch (error) {
+          console.error("Error adding product:", error);
+      }
+  };
 
     
   const all_menus = (colour) => (<>
@@ -127,14 +150,15 @@ export default function PrimarySearchAppBar() {
           <Link to={element.url} style={{color:colour,textDecoration:'none'}}>
             <Typography align="center">{element.label}</Typography>
           </Link>
-      </MenuItem>
+        </MenuItem>
       );
     })}
     {loggedInUser && (
       <MenuItem key="5" onClick={handleCloseNavMenu}>
         <Logout />
       </MenuItem>
-    )}</>
+    )}
+    </>
   );
     
   const menuRenderer = (anchor,id,isMenuOpen,closeHandler) => {
@@ -164,14 +188,15 @@ export default function PrimarySearchAppBar() {
                     edge="start"
                     className={classes.menuButton}
                     color="inherit"
-                    aria-label="open drawer">
+                    aria-label="open drawer"
+                    onClick={addProduct}>
                     <ShoppingCartIcon/>
                 </IconButton>
-                <Typography className={classes.title} variant="h6" noWrap>
+                <Typography className={classes.title} variant="h6" noWrap >
                     upGrad E-Shop
                 </Typography>
                 <div className={classes.grow}/>
-                <Search className={classes.grow} classes={classes}/>
+                <Search className={classes.grow2}/>
                 <div className={classes.grow}/>
                 <div className={classes.sectionDesktop}>
 					        {all_menus('white')}

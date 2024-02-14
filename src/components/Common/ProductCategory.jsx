@@ -59,7 +59,7 @@ const ProductCategory = ({ filter, categories, changeFilter, removeFilter }) => 
           <ChevronLeftIcon/>
         </ToggleButton>
       )}
-      {categories && [ALL,...visibleCategories].map((element, index) => (
+      {categories && (visibleCategories.includes(ALL) ? visibleCategories : [ALL,...visibleCategories]).map((element, index) => (
         <ToggleButton key={`category_${index}`} value={element} aria-label={element} style={{fontSize:'10px', textTransform:'capitalize'}}>
           {element.toUpperCase()}
         </ToggleButton>

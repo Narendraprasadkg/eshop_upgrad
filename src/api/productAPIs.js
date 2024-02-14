@@ -19,7 +19,7 @@ export const fetchAllProducts = (accessToken) => {
 	Axios(apis.PRODUCTS).then((response) => {
 		if(response.ok) {
 			promiseResolveRef({
-				data: response.data.products.map(p => new Product(p)),
+				data: (baseURL === DUMMY_API ? response.data.products : response.data).map(p => new Product(p)),
 				response: response,
 			});
 		} else {
@@ -53,7 +53,7 @@ export const fetchAllProductsByCategory = (category,accessToken) => {
 	Axios(apis.GET_PRODUCTS_BASED_ON_CATEGORY.replace(SEARCH_BY_CATEGORY,category)).then((response) => {
 		if(response.ok) {
 			promiseResolveRef({
-				data: response.data.products.map(p => new Product(p)),
+				data: (baseURL === DUMMY_API ? response.data.products : response.data).map(p => new Product(p)),
 				response: response,
 			});
 		} else {
@@ -84,6 +84,7 @@ export const createProduct = (requestJson, accessToken) => {
 		promiseResolveRef = resolve;
 		promiseRejectRef = reject;
 	});
+	console.log(Axios);
 	Axios.post(apis.ADD_PRODUCT, requestJson)
 	.then((response) => {
 		if(response.ok) {
@@ -153,7 +154,7 @@ export const modifyProduct = (requestJson, accessToken) => {
 		promiseRejectRef = reject;
 	});
 
-	if(baseURL == DUMMY_API){
+	if(baseURL === DUMMY_API){
 		let product = new Product();
 		product.setCommonProps(requestJson);
 		product.setPropsFromLocal(requestJson)

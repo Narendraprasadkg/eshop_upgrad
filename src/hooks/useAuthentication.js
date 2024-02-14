@@ -1,10 +1,12 @@
 import { createContext, useState, useMemo } from "react";
 import { doLogin } from "../api/userAuthAPIs";
+import { setAxios } from "../common/Axios";
+import { auth_localstorage } from '../common';
 
 const AuthCtx = createContext();
 
 const useAuthentication = () => {
-  const initialState = JSON.parse(localStorage.getItem("eshop_project")) || {
+  const initialState = JSON.parse(localStorage.getItem(auth_localstorage)) || {
     user: null,
     userId: null,
     roles: null,
@@ -27,12 +29,18 @@ const useAuthentication = () => {
       accessToken: json.accessToken,
       accessTokenTimeout: json.accessTokenTimeout,
     };
-    localStorage.setItem("eshop_project", JSON.stringify(updatedState));
+    localStorage.setItem(auth_localstorage, JSON.stringify(updatedState));
   };
 
   const removeFromLocalStorage = () => {
-    localStorage.removeItem("eshop_project");
+    localStorage.removeItem(auth_localstorage);
   };
+
+  const setToken = (accessToken) => {
+    setAccessToken(accessToken);
+    localStorage.setItem('token',accessToken);
+    setAxios();
+  }
 
   const loginUser = async (email, password) => {
     try {
@@ -41,7 +49,7 @@ const useAuthentication = () => {
       setLoggedInUser(json.username);
       setLoggedInUserId(json.userId);
       setRoles(json.roles);
-      setAccessToken(json.accessToken);
+      setToken(json.accessToken);
       setAccessTokenTimeout(json.accessTokenTimeout);
       setLoginError(null);
       return json;
@@ -50,7 +58,7 @@ const useAuthentication = () => {
       setLoggedInUser(null);
       setLoggedInUserId(null);
       setRoles(null);
-      setAccessToken(null);
+      setToken(null);
       setAccessTokenTimeout(null);
       setLoginError(error.reason);
       throw error;
@@ -62,25 +70,17 @@ const useAuthentication = () => {
     setLoggedInUser(null);
     setLoggedInUserId(null);
     setRoles(null);
-    setAccessToken(null);
+    setToken(null);
     setAccessTokenTimeout(null);
     setLoginError(null);
     return Promise.resolve();
   };
 
   const hasUserRole = (roleArray = []) => {
-	if (!roles || !Array.isArray(roles)) {
-	  return false;
-	}
-  
-	return roleArray.some((role) => roles.includes(role));
-  };
-
-  const hasRole = (roleArray) => {
-    if (!roles) {
-      return true;
+    if (!roles || !Array.isArray(roles)) {
+      return false;
     }
-
+    
     return roleArray.some((role) => roles.includes(role));
   };
 

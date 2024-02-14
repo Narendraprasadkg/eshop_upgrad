@@ -1,10 +1,11 @@
 import { jwtDecode } from "jwt-decode";
 import { Axios } from "../common/Axios";
 import {apis} from "./APIs";
+import { DUMMY_API,baseURL } from '../common';
 
 export const doLogin = (email, password) => {
   	return new Promise((resolve, reject) => {
-		Axios.post(apis.LOGIN, {username: 'kminchelle',password: '0lelplR'})
+		Axios.post(apis.LOGIN, {username: email,password: password})
 		.then((response) => {
 			if (response.ok) {
 				let token = response.data.token;
@@ -13,11 +14,11 @@ export const doLogin = (email, password) => {
 					username: response.data.email,
 					accessToken: token,
 					accessTokenTimeout: decoded.exp * 1000,
-					roles: ["ADMIN"],
+					roles: baseURL === DUMMY_API ? ["ADMIN"] : response.data.roles,
 					userId: response.data.id,
 					response: response,
 				});
-				} else {
+			} else {
 				reject({
 					reason: "Server error occurred. Please try again.",
 					response: response,

@@ -1,18 +1,22 @@
 import { fetchAllProducts, fetchAllProductsByCategory } from "../../api/productAPIs";
 import { fetchAllCategories } from "../../api/categoryAPIs";
-import { SET_FILTER, CLEAR_FILTER, SET_SORTING, INIT_CATALOG, CLEAR_ALL} from "../actions";
-import { ALL } from "../../common";
+import { SET_FILTER, SET_SORTING, INIT_CATALOG, CLEAR_ALL} from "../actions";
+import { ALL, DUMMY_API, baseURL } from "../../common";
   
 export const setFilter = (category = "",type = SET_FILTER) => async (dispatch) => {
 	try {
-		let products = null;
-		if([ALL, null, '',undefined].includes(category)){
-			category = ALL;
-			products = await fetchAllProducts();
+		if(baseURL === DUMMY_API){
+			let products = null;
+			if([ALL, null, '',undefined].includes(category)){
+				category = ALL;
+				products = await fetchAllProducts();
+			}else{
+				products = await fetchAllProductsByCategory(category);
+			}
+			dispatch({ type, selectedCategory: category, products: products.data});
 		}else{
-			products = await fetchAllProductsByCategory(category);
+			dispatch({ type, selectedCategory: category });
 		}
-		dispatch({ type, selectedCategory: category, products: products.data});
 	} catch (error) {
 		dispatch({ type, selectedCategory: ALL, products: []});
 	}

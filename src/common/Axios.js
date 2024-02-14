@@ -1,36 +1,54 @@
 import axios from 'axios';
 import { baseURL, LOCAL, DUMMY_API } from '../common';
 
-const Axios = axios.create({
-    baseURL 
-});
+let Axios = createAxiosInstance(null);
 
-Axios.interceptors.response.use(
-    (response) => {
-        const contentType = response.headers['content-type'];
-        if (baseURL === LOCAL && contentType && contentType.includes('application/json')) {
-            response.data = JSON.parse(response.data);
+function createAxiosInstance() {
+    const Axios = axios.create({
+        baseURL,
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json', // Add any other headers you may need
         }
+    });
 
-        if(baseURL === DUMMY_API){
-            response.ok = response.status === 200;
+    Axios.interceptors.response.use(
+        (response) => {
+            const contentType = response.headers['content-type'];
+            if (baseURL === LOCAL && contentType && contentType.includes('application/json')) {
+                if (typeof(response) === 'string') {
+                    response.data = JSON.parse(response.data);
+                }
+            }
+    
+            if ([DUMMY_API, LOCAL].includes(baseURL)) {
+                response.ok = [200,201].includes(response.status);
+            }
+    
+            return response;
+        },
+        (error) => {
+            if (error.response) {
+                // The request was made, but the server responded with an error
+                console.error("Response Error:", error.response.status, error.response.data);
+            } else if (error.request) {
+                // The request was made, but no response was received
+                console.error("No Response Error:", error.request);
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.error("Request Setup Error:", error.message);
+            }
+            return Promise.reject(error);
         }
+    );
 
-        return response;
-    },
-    (error) => {
-        if (error.response) {
-            // The request was made, but the server responded with an error
-            console.error("Response Error:", error.response.status, error.response.data);
-        } else if (error.request) {
-            // The request was made, but no response was received
-            console.error("No Response Error:", error.request);
-        } else {
-            // Something happened in setting up the request that triggered an Error
-            console.error("Request Setup Error:", error.message);
-        }
-        return Promise.reject(error);
-    }
-);
+    return Axios;
+}
 
-export { Axios, baseURL, LOCAL, DUMMY_API};
+
+
+function setAxios() {
+    Axios = createAxiosInstance();
+}
+
+export { Axios, baseURL, LOCAL, DUMMY_API, setAxios };

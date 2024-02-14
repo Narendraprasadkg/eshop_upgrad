@@ -1,3 +1,4 @@
+import { DUMMY_API, baseURL, shop_localstorage } from "../../common";
 import { SET_FILTER, CLEAR_FILTER, SET_SORTING, INIT_CATALOG, CLEAR_ALL } from "../actions";
 
 let initialState = {
@@ -11,11 +12,19 @@ const actionReducer = (state = initialState, action) => {
   let data;
   switch (action.type) {
     case SET_FILTER: {
-      data = {
-        ...state,
-        selectedCategory: action.selectedCategory,
-		    products:action.products
-      };
+      if(baseURL === DUMMY_API){
+        data = {
+          ...state,
+          selectedCategory: action.selectedCategory,
+          products:action.products
+        };
+      }else{
+        data = {
+          ...state,
+          selectedCategory: action.selectedCategory,
+          products:JSON.parse(JSON.stringify(state.products))
+        };
+      }
       break;
     }
     case CLEAR_FILTER: {
@@ -49,7 +58,7 @@ const actionReducer = (state = initialState, action) => {
       data = state;
     }
   }
-  localStorage.setItem("eshop_project", JSON.stringify(data));
+  localStorage.setItem(shop_localstorage, JSON.stringify(data));
   return data;
 };
 

@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import { initCatalog } from '../../store/actions/metadataAction';
 import { deleteProduct } from '../../api/productAPIs';
 import useAuthentication from '../../hooks/useAuthentication';
+import { ALL, DUMMY_API, baseURL } from '../../common';
 
 
 const ProductListing = ({ mode, productList, sortBy, category, reFetchAllData }) => {
@@ -36,24 +37,23 @@ const ProductListing = ({ mode, productList, sortBy, category, reFetchAllData })
   };
 
   let getSortedProducts = (list, s) => {
-    if (s === undefined || s === null) {
+    if (!s || s === 'DEFAULT') {
       s = 'DEFAULT';
-    }
-    if (s !== 'DEFAULT') {
-      list.sort((a, b) => {
-        if (s === 'PRICE_ASC') {
-          return a.price - b.price;
-        } else if (s === 'PRICE_DESC') {
-          return b.price - a.price;
-        } else if (s === 'NEWEST') {
-          // NOTE: PLEASE NOTE THAT CREATION DATE OR MODIFICATION DATE IS NOT RECEIVED FROM SERVER,
-          // HENCE "NEWEST" CRITERIA WON'T WORK
-          return 0; // No sorting for "NEWEST" as the required data is not available
-        } else {
-          // Default
-          return a.price - b.price;
-        }
-      });
+    } else {
+        list.sort((a, b) => {
+            switch (s) {
+                case 'PRICE_ASC':
+                    return a.price - b.price;
+                case 'PRICE_DESC':
+                    return b.price - a.price;
+                case 'NEWEST':
+                    // NOTE: "NEWEST" criteria won't work as the required data is not available
+                    return 0; // No sorting for "NEWEST"
+                default:
+                    // Default or unknown case
+                    return a.price - b.price;
+            }
+        });
     }
     return list;
   };
@@ -107,7 +107,7 @@ const ProductListing = ({ mode, productList, sortBy, category, reFetchAllData })
     });
   };
 
-  let products = getFilteredProductsBasedOnQuery(getSortedProducts(productList, sortBy), searchFor);
+  let products = getFilteredProductsBasedOnQuery(getSortedProducts([ALL,null,undefined,''].includes(category) ? productList : productList.filter(f => f.category === category), sortBy), searchFor);
 
   return (
     <>

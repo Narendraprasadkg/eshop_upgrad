@@ -8,3 +8,6 @@ export const baseURL = LOCAL;
 export const MODIFY = 'MODIFY';
 export const ADMIN = 'ADMIN';
 export const USER = 'USER';
+
+export const auth_localstorage = 'eshop_project';
+export const shop_localstorage = 'eshop_project_data';

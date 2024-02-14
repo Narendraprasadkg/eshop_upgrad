@@ -14,7 +14,7 @@ export const fetchAllCategories = (accessToken) => {
 	Axios(apis.CATEGORIES)
 	.then((response) => {
 		if(response.ok) {
-			let arr = response.data;
+			let arr = response.data.filter(f => f.trim().toLowerCase() !== "all");
 			arr.sort();
 			promiseResolveRef({
 				data: arr,

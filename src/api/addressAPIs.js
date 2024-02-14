@@ -44,11 +44,11 @@ export const createAddress = (requestJson, accessToken) => {
 		promiseRejectRef = reject;
 	});
 	const axios = baseURL === DUMMY_API ? AxiosJson : Axios;
-	axios(apis.ADD_ADDRESS, JSON.stringify(requestJson))
+	axios.post(apis.ADD_ADDRESS, JSON.stringify(requestJson))
 	.then((response) => {
 		if(response.ok) {
 			promiseResolveRef({
-				message: "Product " + requestJson.name + " added successfully.",
+				message: "Address added successfully.",
 				response: response,
 			});
 		} else {

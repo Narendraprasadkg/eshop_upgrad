@@ -15,6 +15,7 @@ class Product {
     brand = "";
 
     constructor(product = null) {
+        console.log(product)
         if (product) {
             this.setCommonProps(product);
             if (baseURL === DUMMY_API) {
